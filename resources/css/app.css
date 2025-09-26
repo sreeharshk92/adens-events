@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.main-btn {
+  background-color: rgb(51, 13, 83); /* bg-[rgb(51,13,83)] */
+  color: #fff;                      /* text-white */
+  font-weight: 700;                  /* font-bold */
+  padding-top: 0.5rem;               /* py-2 */
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;                /* px-4 */
+  padding-right: 1rem;
+  border-radius: 0.25rem;            /* rounded */
+}
+
+.main-btn:hover {
+  background-color: rgb(35, 45, 121); /* hover:bg-[rgb(51,13,73)] */
+}
+
+#loader {
+    transition: opacity 0.5s ease;
+}
