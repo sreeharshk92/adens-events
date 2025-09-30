@@ -14,9 +14,10 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.13.18/jquery.timepicker.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.13.18/jquery.timepicker.min.js"></script>
+ <!-- jQuery + Timepicker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -27,6 +28,29 @@
         [x-cloak] {
             display: none !important;
         }
+
+
+        .empty-state {
+   border-style: dashed;
+    border: 2px dashed lightgrey;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 25px 8px;
+    text-align: center;
+}
+
+.empty-state .icon-plus {
+    font-size: 2rem; /* Adjust the size of the icon */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center; /* Optional: To ensure it's centered if you need */
+    color: #d1d5db; /* Equivalent to text-gray-400 */
+    transition: color 0.3s ease-in-out; /* Smooth transition for color changes */
+}
+
+.empty-state .icon-plus:hover {
+    color: #48bb78; /* Equivalent to hover:text-green-500 */
+}
     </style>
 </head>
 

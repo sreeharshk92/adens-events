@@ -92,10 +92,10 @@
             <x-responsive-nav-link :href="route('menu-items.index')" :active="request()->routeIs('menu-items.*')">
                 {{ __('Menu Items') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('quotations.create')" :active="request()->routeIs('quotations.*')">
+            <x-responsive-nav-link :href="route('quotations.create')" :active="request()->routeIs('quotations.create')">
                 {{ __('Create Quotations') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('quotations.index')" :active="request()->routeIs('quotations.*')">
+            <x-responsive-nav-link :href="route('quotations.index')" :active="request()->routeIs('quotations.index')">
                 {{ __('Previous Quotations') }}
             </x-responsive-nav-link>
         </div>

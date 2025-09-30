@@ -27,7 +27,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quotation No</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
@@ -38,33 +38,39 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">{{ $quotation->quotation_number }}</div>
                                     </td>
+                                
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $quotation->client_name }}</div>
                                         <div class="text-sm text-gray-500">{{ $quotation->client_place }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $quotation->event_name }}</div>
-                                        <div class="text-sm text-gray-500">{{ $quotation->event_date }}</div>
+                                        <div class="text-sm text-gray-500">{{ $quotation->event_venue }}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $quotation->created_at->format('M d, Y') }}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $quotation->created_at->format('d M Y') }}, {{ $quotation->event_time }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         ₹{{ number_format($quotation->total_amount, 2) }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <!-- Action Buttons -->
-                                        <div class="flex items-center space-x-2">
+                                        <div class="flex items-center space-x-3">
                                             <a href="{{ route('quotations.show', $quotation) }}" 
                                                class="text-indigo-600 hover:text-indigo-900"
                                                title="View Quotation">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            <a href="{{ route('quotations.edit', $quotation) }}" 
+                                               class="text-indigo-600 hover:text-indigo-900"
+                                               title="Edit Quotation">
+                                                  <i class="fas fa-pen"></i>
+                                            </a>
                                             
                                             <a href="{{ route('quotations.download-pdf', $quotation) }}" 
                                                class="text-green-600 hover:text-green-900"
                                                title="Download PDF">
-                                                <i class="fas fa-file-pdf"></i>
+                                                <i class="fa fa-download"></i>
                                             </a>
 
                                             <!-- WhatsApp Share -->

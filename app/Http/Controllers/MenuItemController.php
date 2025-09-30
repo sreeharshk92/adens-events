@@ -10,7 +10,7 @@ class MenuItemController extends Controller
 {
     public function index()
     {
-                $categories = MenuCategory::where('is_active', true)->get();
+                $categories = MenuCategory::all();
 
         $items = MenuItem::with('category')->get();
         return view('menu-items.index', compact('items','categories'));
@@ -18,7 +18,7 @@ class MenuItemController extends Controller
 
     public function create()
     {
-        $categories = MenuCategory::where('is_active', true)->get();
+        $categories = MenuCategory::all();
         return view('menu-items.create', compact('categories'));
     }
 

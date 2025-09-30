@@ -20,9 +20,81 @@ class QuotationController extends Controller
 
     public function create()
     {
-        $categories = MenuCategory::with('activeMenuItems')->active()->get();
+        $categories = MenuCategory::all();
         return view('quotations.create', compact('categories'));
     }
+
+    public function edit(Quotation $quotation)
+    {
+
+        $categories = MenuCategory::all();
+
+        return view('quotations.edit', compact('categories', 'quotation'));
+    }
+
+    public function update(Request $request, Quotation $quotation)
+    {
+        $request->validate([
+            'client_name' => 'required|string|max:255',
+            'client_place' => 'required|string|max:255',
+            'client_contact' => 'required|string|max:20',
+            'event_name' => 'required|string|max:255',
+            'event_date' => 'required|string|max:255',
+            'event_time' => 'required|string|max:255',
+            'event_venue' => 'required|string|max:255',
+            'number_of_people' => 'required|integer|min:1',
+            'per_plate_price' => 'required|numeric|min:0',
+            'menu_items' => 'required|array|min:1',
+        ]);
+
+        $totalAmount = $request->number_of_people * $request->per_plate_price;
+
+        // Add seat amount if provided
+        if (!empty($request->seat_amount)) {
+            $totalAmount += $request->seat_amount;
+        }
+
+        // Add stage amount if provided
+        if (!empty($request->stage_amount)) {
+            $totalAmount += $request->stage_amount;
+        }
+
+        // Update quotation
+        $quotation->update([
+            'client_name' => $request->client_name,
+            'client_place' => $request->client_place,
+            'client_contact' => $request->client_contact,
+            'event_name' => $request->event_name,
+            'event_date' => $request->event_date,
+            'event_time' => $request->event_time,
+            'event_venue' => $request->event_venue,
+            'number_of_seats' => $request->number_of_seats,
+            'number_of_tables' => $request->number_of_tables,
+            'table_amount' => $request->table_amount,
+            'seat_amount' => $request->seat_amount,
+            'decor_type' => $request->decor_type,
+            'stage_amount' => $request->stage_amount,
+            'number_of_people' => $request->number_of_people,
+            'per_plate_price' => $request->per_plate_price,
+            'total_amount' => $totalAmount
+        ]);
+
+        // Update menu items - first delete existing ones
+        $quotation->quotationItems()->delete();
+
+foreach ($request->menu_items as $menuItemId) {
+    $menuItem = MenuItem::find($menuItemId);
+
+    $quotation->quotationItems()->create([
+        'item_name'     => $menuItem->name,
+        'item_category' => $menuItem->category->name ?? null,
+    ]);
+}
+
+
+        return redirect()->route('quotations.show', $quotation)->with('success', 'Quotation updated successfully.');
+    }
+
 
     public function store(Request $request)
     {
@@ -33,12 +105,23 @@ class QuotationController extends Controller
             'event_name' => 'required|string|max:255',
             'event_date' => 'required|string|max:255',
             'event_time' => 'required|string|max:255',
+            'event_venue' => 'required|string|max:255',
             'number_of_people' => 'required|integer|min:1',
             'per_plate_price' => 'required|numeric|min:0',
-            'menu_items' => 'required|array|min:1'
+            'menu_items' => 'required|array|min:1',
         ]);
 
         $totalAmount = $request->number_of_people * $request->per_plate_price;
+
+        // Add seat amount if provided
+        if (!empty($request->seat_amount)) {
+            $totalAmount += $request->seat_amount;
+        }
+
+        // Add stage amount if provided
+        if (!empty($request->stage_amount)) {
+            $totalAmount += $request->stage_amount;
+        }
 
         $quotation = Quotation::create([
             'client_name' => $request->client_name,
@@ -47,14 +130,27 @@ class QuotationController extends Controller
             'event_name' => $request->event_name,
             'event_date' => $request->event_date,
             'event_time' => $request->event_time,
+            'event_venue' => $request->event_venue,
+            'number_of_seats' => $request->number_of_seats,
+            'number_of_tables' => $request->number_of_tables,
+            'seat_amount' => $request->seat_amount,
+            'table_amount' => $request->table_amount,
+            'decor_type' => $request->decor_type,
+            'stage_amount' => $request->stage_amount,
             'number_of_people' => $request->number_of_people,
             'per_plate_price' => $request->per_plate_price,
             'total_amount' => $totalAmount
         ]);
 
-        foreach ($request->menu_items as $menuItemId) {
-            $quotation->quotationItems()->create(['menu_item_id' => $menuItemId]);
-        }
+   foreach ($request->menu_items as $menuItemId) {
+    $menuItem = MenuItem::find($menuItemId);
+
+    $quotation->quotationItems()->create([
+        'item_name'     => $menuItem->name,
+        'item_category' => $menuItem->category->name ?? null,
+    ]);
+}
+
 
         return redirect()->route('quotations.show', $quotation)->with('success', 'Quotation created successfully.');
     }
@@ -75,7 +171,7 @@ class QuotationController extends Controller
     {
         $quotation->load('quotationItems.menuItem.category');
         $pdf = PDF::loadView('quotations.pdf', compact('quotation'));
-        $fileName = $quotation->client_name . '-quotation-' . $quotation->quotation_number . '.pdf';
+        $fileName = str_replace(' ', '', $quotation->event_name)  . '-' . $quotation->quotation_number . '.pdf';
 
         return $pdf->download($fileName);
     }
@@ -94,7 +190,7 @@ class QuotationController extends Controller
 
         // Generate PDF
         $pdf = PDF::loadView('quotations.pdf', compact('quotation'));
-        $fileName = $quotation->client_name . '-quotation-' . $quotation->quotation_number . '.pdf';
+        $fileName = str_replace(' ', '', $quotation->event_name) . '-' . $quotation->quotation_number . '.pdf';
 
         // Save to storage
         Storage::disk('public')->put('quotations/' . $fileName, $pdf->output());

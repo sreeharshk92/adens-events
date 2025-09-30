@@ -11,13 +11,22 @@ class Quotation extends Model
 
     protected $fillable = [
         'quotation_number',
+        'quotation_name',
+        'gst_number',
         'client_name',
         'client_place',
         'client_contact',
+        'event_venue',
         'event_name',
         'event_date',
         'event_time',
+        'decor_type',
+        'stage_amount',
+        'seat_amount',
+        'table_amount',
+        'number_of_tables',
         'number_of_people',
+        'number_of_seats',
         'per_plate_price',
         'total_amount'
     ];
